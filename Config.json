@@ -1,0 +1,15 @@
+{
+	"Workers": 5,
+	"ApplicationNames": [
+		"AndroidApp",
+		"CreatorDashboard",
+		"MacClientBootstrapper",
+		"MacStudioBootstrapper",
+		"PCDesktopClient",
+		"PCClientBootstrapper",
+		"PCStudioBootstrapper",
+		"UWPApp",
+		"XboxClient",
+		"iOSApp"
+	]
+}
