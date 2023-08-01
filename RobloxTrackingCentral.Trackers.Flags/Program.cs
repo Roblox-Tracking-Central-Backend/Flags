@@ -6,7 +6,7 @@ namespace RobloxTrackingCentral.Trackers.Flags
 {
     internal class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             Console.WriteLine("Roblox Tracking Central");
             Console.WriteLine("Flags Tracker");
