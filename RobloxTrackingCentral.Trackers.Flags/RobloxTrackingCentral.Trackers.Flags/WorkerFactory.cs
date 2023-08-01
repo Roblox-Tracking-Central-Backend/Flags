@@ -1,4 +1,5 @@
 ﻿using LibGit2Sharp;
+using RobloxTrackingCentral.Trackers.Flags.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,9 +32,9 @@ namespace RobloxTrackingCentral.Trackers.Flags
 
             string settingsStr = await Http.Client.GetStringRetry(url);
 
-            var settings = JsonSerializer.Deserialize<Dictionary<string, string>>(settingsStr)!;
+            var settings = JsonSerializer.Deserialize<ApplicationSettings>(settingsStr)!;
 
-            return settings;
+            return settings.Settings;
         }
 
         private void FilterFlags(Dictionary<string, string> flags)
