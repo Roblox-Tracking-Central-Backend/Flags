@@ -12,12 +12,27 @@ namespace RobloxTrackingCentral.Trackers.Flags
         public static Config Default { get; }
 
         public int Workers { get; set; } = 5;
-        public string[] ApplicationNames { get; set; } = null!;
+        public string[] ClientApplications { get; set; } = null!;
+        public string[] BootstrapperApplications { get; set; } = null!;
+        public string[] OtherApplications { get; set; } = null!;
+
+        public string[] AllApplications { get { return ClientApplications.Concat(BootstrapperApplications).Concat(OtherApplications).ToArray(); } }
 
         static Config()
         {
-            Console.WriteLine("Fetching config from " + Constants.Backend);
-            string configJsonStr = Http.Client.GetStringRetry("https://raw.githubusercontent.com/" + Constants.Backend + "/main/Config.json").Result;
+            string configJsonStr;
+
+            if (!File.Exists("Config.json"))
+            {
+                Console.WriteLine("Fetching config from " + Constants.Backend);
+                configJsonStr = Http.Client.GetStringRetry("https://raw.githubusercontent.com/" + Constants.Backend + "/main/Config.json").Result;
+            }
+            else
+            {
+                Console.WriteLine("Fetching config locally");
+                configJsonStr = File.ReadAllText("Config.json");
+            }
+
             Default = JsonSerializer.Deserialize<Config>(configJsonStr)!;
         }
     }

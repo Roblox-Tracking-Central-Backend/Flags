@@ -41,14 +41,14 @@ namespace RobloxTrackingCentral.Trackers.Flags
             Console.WriteLine("Fetching application names from " + Constants.Backend);
 
             Queue<string> applicationQueue = new Queue<string>();
-            foreach (string application in Config.Default.ApplicationNames)
+            foreach (string application in Config.Default.AllApplications)
                 applicationQueue.Enqueue(application);
 
             Console.WriteLine($"Got {applicationQueue.Count} applications");
             Console.WriteLine($"Using {Config.Default.Workers} workers");
 
-            Console.WriteLine("Starting" + nameof(WorkerFactory));
-            WorkerFactory factory = new WorkerFactory(repository, applicationQueue);
+            Console.WriteLine("Starting" + nameof(GetWorkerFactory));
+            GetWorkerFactory factory = new GetWorkerFactory(applicationQueue);
 
             List<Task> workers = new List<Task>();
 
@@ -56,19 +56,27 @@ namespace RobloxTrackingCentral.Trackers.Flags
                 workers.Add(factory.Create());
 
             Task.WaitAll(workers.ToArray());
-
             Console.WriteLine("Workers have finished");
 
-            List<string> changes = factory.Changes;
+            Console.WriteLine("Starting " + nameof(FlagWorker));
+            FlagWorker flagWorker = new FlagWorker(repository, factory.Applications);
+            flagWorker.Start();
+
+            List<string> changes = flagWorker.Changes;
             changes.Sort();
 
+            Console.WriteLine("Flag worker has finished");
+
+            string changesJoined = string.Join(", ", changes);
+
+#if RELEASE
             Console.WriteLine("Committing changes");
 
             try
             {
                 var time = DateTimeOffset.Now;
                 var signature = new Signature("Roblox Tracking Central", "rtc@rtc.local", time);
-                var commit = repository.Commit($"{time.ToString("dd/MM/yyyy HH:mm:ss")} [{string.Join(", ", changes)}]", signature, signature);
+                var commit = repository.Commit($"{time.ToString("dd/MM/yyyy HH:mm:ss")} [{changesJoined}]", signature, signature);
                 Console.WriteLine("Committing!");
 
                 var remote = repository.Network.Remotes["origin"];
@@ -83,6 +91,11 @@ namespace RobloxTrackingCentral.Trackers.Flags
             {
                 Console.WriteLine("No changes found");
             }
+#else
+            Console.WriteLine("Committing is disabled for debug builds");
+            Console.WriteLine("Changes:");
+            Console.WriteLine(changesJoined);
+#endif
         }
     }
 }
