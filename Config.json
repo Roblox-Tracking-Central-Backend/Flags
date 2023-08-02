@@ -3,7 +3,9 @@
 	"ClientApplications": [
 		"AndroidApp",
 		"MacDesktopClient",
+		"MacStudioApp",
 		"PCDesktopClient",
+		"PCStudioApp",
 		"UWPApp",
 		"XboxClient",
 		"iOSApp"
