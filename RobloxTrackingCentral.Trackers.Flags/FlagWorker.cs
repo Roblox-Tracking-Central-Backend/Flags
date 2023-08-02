@@ -35,9 +35,9 @@ namespace RobloxTrackingCentral.Trackers.Flags
                 return Path.Combine(Constants.ClonePath, application + ".json");
         }
 
-        private bool AnyChanges(string file, string newContents)
+        private bool AnyChanges(string application, string newContents)
         {
-            string clonePath = ConstructPath(file, true);
+            string clonePath = ConstructPath(application, true);
             if (!File.Exists(clonePath))
                 return true;
 
@@ -67,7 +67,7 @@ namespace RobloxTrackingCentral.Trackers.Flags
                 string newContents = JsonSerializer.Serialize(flags, new JsonSerializerOptions { WriteIndented = true });
 
                 if (!AnyChanges(applicationName, newContents))
-                    return;
+                    continue;
 
                 Console.WriteLine($"[{applicationName}] Changes found");
 
