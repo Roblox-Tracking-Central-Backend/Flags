@@ -8,7 +8,8 @@
 		"PCStudioApp",
 		"UWPApp",
 		"XboxClient",
-		"iOSApp"
+		"iOSApp",
+		"PlayStationClient"
 	],
 	"BootstrapperApplications": [
 		"MacClientBootstrapper",
