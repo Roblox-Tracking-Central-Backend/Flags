@@ -9,7 +9,8 @@
 		"UWPApp",
 		"XboxClient",
 		"iOSApp",
-		"PlayStationClient"
+		"PlayStationClient",
+		"QuestVRApp"
 	],
 	"BootstrapperApplications": [
 		"MacClientBootstrapper",
